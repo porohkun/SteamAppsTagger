@@ -1,0 +1,50 @@
+﻿<Window x:Class="SteamAppsTagger.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SteamAppsTagger"
+        mc:Ignorable="d" Loaded="Window_Loaded"
+        Width="{Binding Source={x:Static local:Settings.Instance}, Path=LevelBrowserWindow.Width, Mode=TwoWay}" MinWidth="560"
+        Height="{Binding Source={x:Static local:Settings.Instance}, Path=LevelBrowserWindow.Height, Mode=TwoWay}" MinHeight="400"
+        WindowState="{Binding Source={x:Static local:Settings.Instance}, Path=LevelBrowserWindow.State, Mode=TwoWay}"
+        >
+    <Window.Resources>
+        <Style TargetType="CheckBox" x:Key="TagColumnStyle">
+            <Setter Property="IsChecked" Value="{Binding Path=IsSelected, UpdateSourceTrigger=PropertyChanged}"/>
+        </Style>
+    </Window.Resources>
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="2">
+            <Button Content="Refresh tags" Margin="2"/>
+            <Separator Width="20" Background="{x:Null}" Foreground="{x:Null}"/>
+            <Button Content="Save tags" Margin="2" Click="Save_Click"/>
+            <Separator Width="20" Background="{x:Null}" Foreground="{x:Null}"/>
+            <!--<Button Content="Test" Margin="2" Click="Test_Click"/>-->
+        </StackPanel>
+        <local:ColumnsOrder x:Name="grid" Grid.Column="2" ItemsSource="{Binding Tags}" ColumnsFormat="Tags[{0}]">
+            <local:ColumnsOrder.Resources>
+                <ResourceDictionary>
+                    <Style TargetType="GridViewColumnHeader">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    </Style>
+                    <ResourceDictionary.MergedDictionaries>
+                        <ResourceDictionary Source="/Viewing/ColumnsOrder.xaml"/>
+                    </ResourceDictionary.MergedDictionaries>
+                </ResourceDictionary>
+            </local:ColumnsOrder.Resources>
+            <ListView ItemsSource="{Binding Apps}" local:SortBehavior.CanUserSortColumns="true">
+                <ListView.View>
+                    <GridView ColumnHeaderTemplate="{StaticResource SortHeaderTemplate}">
+                        <GridView.Columns>
+                            <GridViewColumn Header="Game"
+                                            DisplayMemberBinding="{Binding Name}"
+                                            local:ColumnsOrder.ColumnId="Name"
+                                            local:SortBehavior.FixedOrder="0"/>
+                        </GridView.Columns>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </local:ColumnsOrder>
+    </DockPanel>
+</Window>

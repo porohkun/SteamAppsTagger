@@ -2,8 +2,16 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:SteamAppsTagger"
-             StartupUri="MainWindow.xaml">
+             StartupUri="Windows/MainWindow.xaml">
     <Application.Resources>
-         
+        <Style TargetType="TextBlock" x:Key="HeaderStyle">
+            <Setter Property="Margin" Value="4,2"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="AppNameStyle">
+            <Setter Property="Margin" Value="4,2"/>
+        </Style>
+        <Style TargetType="CheckBox" x:Key="TagCheckStyle">
+            <Setter Property="Margin" Value="11,2,2,2"/>
+        </Style>
     </Application.Resources>
 </Application>

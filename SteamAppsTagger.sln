@@ -5,7 +5,13 @@ VisualStudioVersion = 15.0.26430.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamAppsTagger", "SteamAppsTagger\SteamAppsTagger.csproj", "{8737C742-29CD-406B-8C54-8348907D8A29}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MimiJson", "MimiJson\MimiJson\MimiJson.shproj", "{281C59DB-40B5-4A7F-93CF-4227EE3177D2}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		MimiJson\MimiJson\MimiJson.projitems*{281c59db-40b5-4a7f-93cf-4227ee3177d2}*SharedItemsImports = 13
+		MimiJson\MimiJson\MimiJson.projitems*{8737c742-29cd-406b-8c54-8348907d8a29}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -18,5 +24,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D4CFD233-C88C-4383-B16A-5D95C5706825}
 	EndGlobalSection
 EndGlobal
