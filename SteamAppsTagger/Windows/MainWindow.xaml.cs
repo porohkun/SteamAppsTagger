@@ -16,8 +16,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using SteamAppsTagger.VDF;
 using System.Net;
+using Indieteur.VDFAPI;
 
 //VDF - valve data format
 //http://cdn.akamai.steamstatic.com/steam/apps/457140/capsule_sm_120.jpg
@@ -31,8 +31,7 @@ namespace SteamAppsTagger
     {
         private SteamUser _steamUser;
         private string _userId;
-        private VdfDocument _localConfig;
-        private VdfDocument _sharedConfig;
+        private VDFNode _localConfig;
 
         public MainWindow()
         {
@@ -55,14 +54,14 @@ namespace SteamAppsTagger
             //get steam users
             var userdatapath = Path.Combine(Settings.SteamInstallPath, "userdata");
             var users = new Dictionary<string, string>();
-            var localconfigs = new Dictionary<string, VdfDocument>();
+            var localconfigs = new Dictionary<string, VDFNode>();
             foreach (var userdirpath in Directory.GetDirectories(userdatapath, "*", SearchOption.TopDirectoryOnly))
             {
                 var userid = Path.GetFileName(userdirpath);
-                var localconfig = VdfDocument.ParceFile(Path.Combine(userdirpath, "config", "localconfig.vdf"));
+                var localconfig = new VDFData(File.ReadAllText(Path.Combine(userdirpath, "config", "localconfig.vdf")), false).Nodes[0];
                 localconfigs.Add(userid, localconfig);
                 var username = "Unknown";
-                try { username = localconfig["friends"][userid]["name"]; } catch { }
+                try { username = localconfig.Node("friends").Node(userid).Key("name"); } catch { }
                 users.Add(userid, username);
             }
             switch (users.Count)
@@ -77,28 +76,13 @@ namespace SteamAppsTagger
                     _userId = suw.SelectedUser;
                     break;
             }
+            _localConfig = localconfigs[_userId];
 
             _steamUser = new SteamUser(_userId);
             _steamUser.UpdateAppsFromWeb();
+            _steamUser.UpdateAppsFromSharedConfig();
             DataContext = _steamUser;
 
-            //get steamapps
-            _localConfig = localconfigs[_userId];
-            _sharedConfig = VdfDocument.ParceFile(Path.Combine(Settings.SteamInstallPath, "userdata", _userId, "7", "remote", "sharedconfig.vdf"));
-
-            var apps = _sharedConfig["Software"]["Valve"]["Steam"]["apps"].Object;
-            foreach (var app in apps)
-            {
-                var appId = app.Key;
-                var steamApp = _steamUser.Apps.FirstOrDefault(a => a.Id.ToString() == appId);
-                if (steamApp != null)
-                {
-                    if (app.Value.Object.ContainsKey("tags"))
-                        foreach (var tag in app.Value["tags"].Object.Select(t => t.Value.Text))
-                            steamApp.SetTag(tag, true);
-                }
-            }
-            _steamUser.UpdateTags();
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)

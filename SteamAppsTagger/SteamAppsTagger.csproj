@@ -8,11 +8,12 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>SteamAppsTagger</RootNamespace>
     <AssemblyName>SteamAppsTagger</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -34,6 +35,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Indieteur.SAMAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Indieteur.SteamAppsManAndVDFAPI.1.0.3\lib\Indieteur.SAMAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="Indieteur.VDFAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Indieteur.SteamAppsManAndVDFAPI.1.0.3\lib\Indieteur.VDFAPI.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -64,12 +71,6 @@
     <Compile Include="Windows\SelectUserWindow.xaml.cs">
       <DependentUpon>SelectUserWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="VDF\VdfDocument.cs" />
-    <Compile Include="VDF\VdfObject.cs" />
-    <Compile Include="VDF\VdfReaderExtensions.cs" />
-    <Compile Include="VDF\VdfReaderToken.cs" />
-    <Compile Include="VDF\VdfValueType.cs" />
-    <Compile Include="VDF\VdfValue.cs" />
     <Page Include="Viewing\ColumnsOrder.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -109,6 +110,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

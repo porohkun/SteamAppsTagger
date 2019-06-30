@@ -1,4 +1,5 @@
-﻿using MimiJson;
+﻿using Indieteur.VDFAPI;
+using MimiJson;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,10 +19,14 @@ namespace SteamAppsTagger
         public ObservableCollection<string> Tags { get; private set; } = new ObservableCollection<string>();
         public ObservableCollection<AppInfo> Apps { get; private set; } = new ObservableCollection<AppInfo>();
 
+        private string _sharedConfigPath;
+        private VDFData _sharedConfig;
+
         public SteamUser(string folderName)
         {
             Id = DirNametoID64(folderName);
             Name = folderName;
+            _sharedConfigPath = Path.Combine(Settings.SteamInstallPath, "userdata", Name, "7", "remote", "sharedconfig.vdf");
         }
 
         public void UpdateAppsFromWeb()
@@ -39,6 +44,25 @@ namespace SteamAppsTagger
             foreach (var info in json["response"]["games"].Array)
                 Apps.Add(new AppInfo(info));
 
+            UpdateTags();
+        }
+
+        public void UpdateAppsFromSharedConfig()
+        {
+            _sharedConfig = new VDFData(File.ReadAllText(_sharedConfigPath), false);
+
+            var apps = _sharedConfig.Nodes[0].Node("Software").Node("Valve").Node("Steam").Node("apps").Nodes;
+            foreach (var app in apps)
+            {
+                var appId = app.Name;
+                var steamApp = Apps.FirstOrDefault(a => a.Id.ToString() == appId);
+                if (steamApp != null)
+                {
+                    if (app.ContainsNode("tags"))
+                        foreach (var tag in app.Node("tags").Keys.Select(k => k.Value))
+                            steamApp.SetTag(tag, true);
+                }
+            }
             UpdateTags();
         }
 

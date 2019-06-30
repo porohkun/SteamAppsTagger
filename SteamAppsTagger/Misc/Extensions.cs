@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Indieteur.VDFAPI;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -36,5 +37,26 @@ namespace SteamAppsTagger
             }
             return -1;
         }
+
+        public static VDFNode Node(this VDFNode node, string name)
+        {
+            return node.Nodes.FirstOrDefault(n => n.Name == name);
+        }
+
+        public static bool ContainsNode(this VDFNode node, string name)
+        {
+            return node.Nodes.Any(n => n.Name == name);
+        }
+
+        public static string Key(this VDFNode node, string name)
+        {
+            return node.Keys.FirstOrDefault(n => n.Name == name).Value;
+        }
+
+        public static bool ContainsKey(this VDFNode node, string name)
+        {
+            return node.Keys.Any(n => n.Name == name);
+        }
+
     }
 }
