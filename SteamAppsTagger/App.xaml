@@ -4,14 +4,14 @@
              xmlns:local="clr-namespace:SteamAppsTagger"
              StartupUri="Windows/MainWindow.xaml">
     <Application.Resources>
-        <Style TargetType="TextBlock" x:Key="HeaderStyle">
-            <Setter Property="Margin" Value="4,2"/>
-        </Style>
-        <Style TargetType="TextBlock" x:Key="AppNameStyle">
-            <Setter Property="Margin" Value="4,2"/>
-        </Style>
-        <Style TargetType="CheckBox" x:Key="TagCheckStyle">
-            <Setter Property="Margin" Value="11,2,2,2"/>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Colors/DarkColors.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Controls/BaseButton.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Controls/BaseTextBlock.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Controls/BaseToggleButton.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Controls/BaseWindow.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

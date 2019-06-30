@@ -2,13 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:SteamAppsTagger">
     <DataTemplate x:Key="SortHeaderTemplate">
-        <Grid Margin="3,0" Grid.IsSharedSizeScope="True">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+        <Grid Margin="3,0" Grid.IsSharedSizeScope="True" Background="Transparent">
             <TextBlock Text="{Binding}" Grid.Column="0" HorizontalAlignment="Left" AllowDrop="True" TextWrapping="WrapWithOverflow"/>
-            <Path x:Name="arrow" Width="15" StrokeThickness="1" Fill="DarkGray" VerticalAlignment="Center" Visibility="Collapsed" Grid.Column="1" />
+            <Path x:Name="arrow" Width="15" StrokeThickness="1" Fill="{StaticResource ResourceKey=PlayBrush}" VerticalAlignment="Center" Visibility="Collapsed" HorizontalAlignment="Right" Margin="-12,0"/>
         </Grid>
         <DataTemplate.Triggers>
             <MultiDataTrigger>

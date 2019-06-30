@@ -38,6 +38,20 @@ namespace SteamAppsTagger
             return -1;
         }
 
+        public static void Sort<T>(this ObservableCollection<T> collection, Comparison<T> comparison = null)
+        {
+            var sortableList = new List<T>(collection);
+            if (comparison == null)
+                sortableList.Sort();
+            else
+                sortableList.Sort(comparison);
+
+            for (int i = 0; i < sortableList.Count; i++)
+            {
+                collection.Move(collection.IndexOf(sortableList[i]), i);
+            }
+        }
+
         public static VDFNode Node(this VDFNode node, string name)
         {
             return node.Nodes.FirstOrDefault(n => n.Name == name);

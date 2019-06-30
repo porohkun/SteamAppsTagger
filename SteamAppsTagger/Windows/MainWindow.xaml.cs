@@ -88,6 +88,7 @@ namespace SteamAppsTagger
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Steam app must be closed");
+            _steamUser.Save();
         }
     }
 }

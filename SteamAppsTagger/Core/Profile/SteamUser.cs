@@ -56,14 +56,48 @@ namespace SteamAppsTagger
             {
                 var appId = app.Name;
                 var steamApp = Apps.FirstOrDefault(a => a.Id.ToString() == appId);
-                if (steamApp != null)
+                if (steamApp == null)
                 {
+                    int id;
+                    if (int.TryParse(app.Name, out id))
+                    {
+                        steamApp = new AppInfo(id);
+                        Apps.Add(steamApp);
+                    }
+                }
+                if (steamApp != null)
                     if (app.ContainsNode("tags"))
                         foreach (var tag in app.Node("tags").Keys.Select(k => k.Value))
                             steamApp.SetTag(tag, true);
-                }
             }
             UpdateTags();
+        }
+
+        public void Save()
+        {
+            var apps = _sharedConfig.Nodes[0].Node("Software").Node("Valve").Node("Steam").Node("apps");
+            foreach (var app in Apps)
+            {
+                var vdfApp = apps.Node(app.Id.ToString());
+                if (vdfApp == null)
+                {
+                    vdfApp = new VDFNode(app.Id.ToString(), _sharedConfig, apps);
+                    apps.Nodes.Add(vdfApp);
+                }
+                var tagsNode = vdfApp.Node("tags");
+                if (tagsNode != null)
+                    foreach (var key in tagsNode.Keys.Select(k => k.Name).ToArray())
+                        tagsNode.Keys.CleanRemoveKey(key);
+                int keyIndex = 0;
+                foreach (var tag in app.Tags.Where(p => p.Value).Select(p => p.Key))
+                {
+                    if (tagsNode == null)
+                        tagsNode = new VDFNode("tags", _sharedConfig, vdfApp);
+                    tagsNode.Keys.Add(new VDFKey(keyIndex.ToString(), tag, tagsNode));
+                    keyIndex++;
+                }
+            }
+            _sharedConfig.SaveToFile(_sharedConfigPath, true);
         }
 
         public void UpdateTags()
@@ -84,6 +118,11 @@ namespace SteamAppsTagger
             foreach (var tag in tags)
                 if (!Tags.Contains(tag))
                     Tags.Add(tag);
+
+            Apps.Sort((a1, a2) =>
+            {
+                return a1.Name.CompareTo(a2.Name);
+            });
         }
 
         public static Int64 DirNametoID64(string cId)

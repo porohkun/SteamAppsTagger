@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SteamAppsTagger"
-        mc:Ignorable="d" Loaded="Window_Loaded"
+        mc:Ignorable="d" Loaded="Window_Loaded" Style="{StaticResource BaseWindowStyle}"
         Width="{Binding Source={x:Static local:Settings.Instance}, Path=LevelBrowserWindow.Width, Mode=TwoWay}" MinWidth="560"
         Height="{Binding Source={x:Static local:Settings.Instance}, Path=LevelBrowserWindow.Height, Mode=TwoWay}" MinHeight="400"
         WindowState="{Binding Source={x:Static local:Settings.Instance}, Path=LevelBrowserWindow.State, Mode=TwoWay}"
@@ -12,6 +12,30 @@
     <Window.Resources>
         <Style TargetType="CheckBox" x:Key="TagColumnStyle">
             <Setter Property="IsChecked" Value="{Binding Path=IsSelected, UpdateSourceTrigger=PropertyChanged}"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="HeaderStyle">
+            <Setter Property="Margin" Value="4,2"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="AppNameStyle">
+            <Setter Property="Margin" Value="4,2"/>
+        </Style>
+        <Style TargetType="CheckBox" x:Key="TagCheckStyle">
+            <Setter Property="Margin" Value="11,2,2,2"/>
+        </Style>
+        <Style x:Key="GridViewColumnHeaderGripper" TargetType="Thumb">
+            <Setter Property="Width" Value="12"/>
+            <Setter Property="Background" Value="{StaticResource BgrMainBrush}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Border Padding="{TemplateBinding Padding}"
+                                Background="Transparent">
+                            <Rectangle HorizontalAlignment="Center" Width="2"
+                                       Fill="{TemplateBinding Background}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
     <DockPanel>
@@ -25,22 +49,110 @@
         <local:ColumnsOrder x:Name="grid" Grid.Column="2" ItemsSource="{Binding Tags}" ColumnsFormat="Tags[{0}]">
             <local:ColumnsOrder.Resources>
                 <ResourceDictionary>
-                    <Style TargetType="GridViewColumnHeader">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    </Style>
                     <ResourceDictionary.MergedDictionaries>
                         <ResourceDictionary Source="/Viewing/ColumnsOrder.xaml"/>
                     </ResourceDictionary.MergedDictionaries>
                 </ResourceDictionary>
             </local:ColumnsOrder.Resources>
-            <ListView ItemsSource="{Binding Apps}" local:SortBehavior.CanUserSortColumns="true">
+            <ListView ItemsSource="{Binding Apps}"
+                      local:SortBehavior.CanUserSortColumns="true"
+                      Background="{StaticResource BgrDarkBrush}"
+                      AlternationCount="2"
+                      BorderBrush="{x:Null}" BorderThickness="0">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Background="Transparent" x:Name="__PART_GRID"></Grid>
+                        <DataTemplate.Triggers>
+                            <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                                <Setter TargetName="__PART_GRID" Property="Background" Value="Red"/>
+                            </Trigger>
+                            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                                <Setter TargetName="__PART_GRID" Property="Background" Value="Blue"/>
+                            </Trigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                    <Border BorderBrush="Transparent" x:Name="__PART_GRID"
+                                            BorderThickness="0"
+                                            Background="{TemplateBinding Background}">
+                                        <GridViewRowPresenter HorizontalAlignment="Stretch"
+                                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                              Width="Auto" Margin="0"
+                                                              Content="{TemplateBinding Content}"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                           
+                            <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
+                                <Setter Property="Background" Value="{StaticResource BgrDarkBrush}" />
+                            </Trigger>
+                            <Trigger Property="ItemsControl.AlternationIndex"  Value="1">
+                                <Setter Property="Background" Value="{StaticResource BgrAltDarkBrush}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.ItemContainerStyle>
                 <ListView.View>
                     <GridView ColumnHeaderTemplate="{StaticResource SortHeaderTemplate}">
+                        <GridView.ColumnHeaderContainerStyle>
+                            <Style TargetType="GridViewColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                <Setter Property="Background" Value="{StaticResource BgrDarkBrush}"/>
+                                <Setter Property="Foreground" Value="{StaticResource BgrMainBrush}"/>
+                                <Setter Property="BorderBrush" Value="{StaticResource BgrMainBrush}"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="GridViewColumnHeader">
+                                            <Grid>
+                                                <Border Name="HeaderBorder" BorderThickness="0,0,0,2"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        Background="{TemplateBinding Background}"
+                                                        Padding="2,0,2,0">
+                                                    <ContentPresenter Name="HeaderContent"
+                                                                      TextElement.Foreground="{TemplateBinding Foreground}"
+                                                                      Margin="0,0,10,1"                                                                      
+                                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                      RecognizesAccessKey="True"
+                                                                      SnapsToDevicePixels= "{TemplateBinding SnapsToDevicePixels}"/>
+                                                </Border>
+                                                <Thumb x:Name="PART_HeaderGripper"
+                                                       HorizontalAlignment="Right"
+                                                       Margin="0,0,-6,0"
+                                                       Style="{StaticResource GridViewColumnHeaderGripper}"/>
+                                            </Grid>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="true">
+                                                    <Setter TargetName="HeaderBorder" Property="Background" Value="{StaticResource BgrMainBrush}"/>
+                                                </Trigger>
+                                                <Trigger Property="IsPressed" Value="True">
+                                                    <Setter TargetName="HeaderBorder" Property="Background" Value="{StaticResource ButtonFocusedBrush}" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </GridView.ColumnHeaderContainerStyle>
                         <GridView.Columns>
                             <GridViewColumn Header="Game"
-                                            DisplayMemberBinding="{Binding Name}"
                                             local:ColumnsOrder.ColumnId="Name"
-                                            local:SortBehavior.FixedOrder="0"/>
+                                            local:SortBehavior.FixedOrder="0">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                         </GridView.Columns>
                     </GridView>
                 </ListView.View>

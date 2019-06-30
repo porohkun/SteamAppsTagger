@@ -65,6 +65,8 @@ namespace SteamAppsTagger
         [AttachedPropertyBrowsableForType(typeof(GridViewColumn))]
         public static bool GetCanUserSort(GridViewColumn element)
         {
+            if (element == null)
+                return false;
             return (bool)element.GetValue(CanUserSortProperty);
         }
 
@@ -177,7 +179,7 @@ namespace SteamAppsTagger
         private static void DoSort(ListView listView, GridViewColumn newColumn)
         {
             var sortDescriptions = listView.Items.SortDescriptions;
-            var newDirection = ListSortDirection.Ascending;
+            var newDirection = ListSortDirection.Descending;
 
             var propertyPath = ResolveSortExpression(newColumn);
             if (propertyPath != null)
@@ -203,6 +205,7 @@ namespace SteamAppsTagger
                 }
 
                 sortDescriptions.Add(new SortDescription(propertyPath, newDirection));
+                sortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
                 SetSortDirection(newColumn, newDirection);
             }
         }

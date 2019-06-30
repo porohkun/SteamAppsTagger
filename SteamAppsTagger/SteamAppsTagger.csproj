@@ -123,5 +123,6 @@
     <Folder Include="Converters\" />
   </ItemGroup>
   <Import Project="..\MimiJson\MimiJson\MimiJson.projitems" Label="Shared" />
+  <Import Project="..\WPF.MyFlatTheme\WPF.MyFlatTheme.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

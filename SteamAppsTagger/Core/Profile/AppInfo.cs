@@ -42,10 +42,12 @@ namespace SteamAppsTagger
         public int Id { get; private set; }
         public Dictionary<string, bool> Tags { get; private set; } = new Dictionary<string, bool>();
 
-        public AppInfo(JsonValue info)
+        public AppInfo(JsonValue info) : this((int)info["appid"]) { }
+
+        public AppInfo(int id)
         {
-            Id = info["appid"];
-            Name = GetAppName(Id);
+            Id = id;
+            Name = $"[{Id}]{GetAppName(Id)}";
         }
 
         public void AddTag(string tag, bool enabled)

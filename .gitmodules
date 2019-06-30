@@ -1,3 +1,6 @@
 [submodule "MimiJson"]
 	path = MimiJson
 	url = ../MimiJson.git
+[submodule "WPF.MyFlatTheme"]
+	path = WPF.MyFlatTheme
+	url = ../WPF.MyFlatTheme.git

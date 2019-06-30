@@ -97,10 +97,15 @@ namespace SteamAppsTagger
                 {
                     var expression = string.Format(ColumnsFormat, key);
                     var binding = new Binding(expression);
+                    var cellTemplate = new DataTemplate();
+                    FrameworkElementFactory cbFactory = new FrameworkElementFactory(typeof(CheckBox));
+                    cbFactory.SetBinding(CheckBox.IsCheckedProperty, binding);
+                    cellTemplate.VisualTree = cbFactory;
+
                     var column = new GridViewColumn()
                     {
                         Header = key,
-                        DisplayMemberBinding = binding
+                        CellTemplate = cellTemplate
                     };
                     SetColumnId(column, key);
                     SortBehavior.SetSortExpression(column, expression);
